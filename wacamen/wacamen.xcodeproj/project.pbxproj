@@ -15,6 +15,8 @@
 		F315BEA91FBEC8C60083E6AB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F315BEA71FBEC8C60083E6AB /* Main.storyboard */; };
 		F315BEAB1FBEC8C60083E6AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F315BEAA1FBEC8C60083E6AB /* Assets.xcassets */; };
 		F315BEAE1FBEC8C60083E6AB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F315BEAC1FBEC8C60083E6AB /* LaunchScreen.storyboard */; };
+		F5B36A3C1FC7389E00041310 /* bgm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5B36A3A1FC7389E00041310 /* bgm.mp3 */; };
+		F5B36A3D1FC7389E00041310 /* effect1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = F5B36A3B1FC7389E00041310 /* effect1.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		F315BEAA1FBEC8C60083E6AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F315BEAD1FBEC8C60083E6AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F315BEAF1FBEC8C60083E6AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F5B36A3A1FC7389E00041310 /* bgm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgm.mp3; sourceTree = "<group>"; };
+		F5B36A3B1FC7389E00041310 /* effect1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = effect1.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,7 @@
 		F315BE9C1FBEC8C60083E6AB /* wacamen */ = {
 			isa = PBXGroup;
 			children = (
+				F5B36A3E1FC738CB00041310 /* Sounds */,
 				F315BE9D1FBEC8C60083E6AB /* AppDelegate.swift */,
 				F315BE9F1FBEC8C60083E6AB /* GameScene.sks */,
 				F315BEA11FBEC8C60083E6AB /* Actions.sks */,
@@ -71,6 +76,15 @@
 				F315BEAF1FBEC8C60083E6AB /* Info.plist */,
 			);
 			path = wacamen;
+			sourceTree = "<group>";
+		};
+		F5B36A3E1FC738CB00041310 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				F5B36A3B1FC7389E00041310 /* effect1.mp3 */,
+				F5B36A3A1FC7389E00041310 /* bgm.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,7 +148,9 @@
 			files = (
 				F315BEA91FBEC8C60083E6AB /* Main.storyboard in Resources */,
 				F315BEA01FBEC8C60083E6AB /* GameScene.sks in Resources */,
+				F5B36A3D1FC7389E00041310 /* effect1.mp3 in Resources */,
 				F315BEAB1FBEC8C60083E6AB /* Assets.xcassets in Resources */,
+				F5B36A3C1FC7389E00041310 /* bgm.mp3 in Resources */,
 				F315BEAE1FBEC8C60083E6AB /* LaunchScreen.storyboard in Resources */,
 				F315BEA21FBEC8C60083E6AB /* Actions.sks in Resources */,
 			);
