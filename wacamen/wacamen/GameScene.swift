@@ -75,8 +75,8 @@ class GameScene: SKScene {
     
     // MARK: - BUTTON
     func createButton(){
-        let button = SKSpriteNode(imageNamed: "grass3")
-        button.position = CGPoint(x:self.frame.width/2, y:5)
+        let button = SKSpriteNode(imageNamed: "rightButton")
+        button.position = CGPoint(x:self.frame.width/2, y:self.frame.height/4)
         button.zPosition = 1
         button.name = "button"
         self.addChild(button)
