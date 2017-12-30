@@ -16,7 +16,6 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         let scene = GameScene()
-        //GameViewControllerのviewをSKView型として取り出す
         let gameView = self.view as! SKView
         
         gameView.showsFPS = true
