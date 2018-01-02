@@ -25,11 +25,7 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             if self.atPoint(location).name == "rightButton" {
                 walkingPlayer()
-                flag = 1
-            }
-            if self.atPoint(location).name == "leftButton" {
-                walkingPlayer()
-                flag = 2
+                flag = true
             }
         }
     }
@@ -37,28 +33,38 @@ class GameScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         player.removeAllActions()
         player.texture = SKTexture(imageNamed: "standing2")
-        flag = 0
+        flag = false
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if(flag == 1){
-            tree.position.x -= 5
-        }
-        if(flag == 2){
-            tree.position.x += 5
+        if(flag){
+            
+            for i in 0 ... tree.count - 1{
+                tree[i].position.x -= 5
+                if(tree[i].position.x == self.frame.size.width / 2){
+                    createTree()
+                }
+            }
+            if(tree[0].position.x == -tree[0].size.width / 2){
+                tree.removeFirst()
+            }
         }
     }
   
     func setupBackground(){
-        let backgroundTexture = SKSpriteNode(texture: SKTexture(imageNamed: "background"))
+        let backgroundTexture = SKSpriteNode(imageNamed: "background")
         addChild(backgroundTexture)
         backgroundTexture.size = CGSize(width: self.frame.size.width * 2, height: self.frame.size.height * 2)
+        
+        let floarTexture = SKSpriteNode(imageNamed: "floar")
+        addChild(floarTexture)
+        floarTexture.size = CGSize(width: self.frame.size.width * 2, height: self.frame.size.height / 1.4)
     }
     
     // MARK: - PLAYER
     
     struct Constants{
-        static let playerImages = ["standing2","walking","walking2"]
+        static let playerImages = ["walking","walking2"]
     }
     var player: SKSpriteNode!
     var playerTexture = [SKTexture]()
@@ -69,7 +75,7 @@ class GameScene: SKScene {
             texture.filteringMode = .linear
             playerTexture.append(texture)
         }
-        player = SKSpriteNode(texture: playerTexture[0])
+        player = SKSpriteNode(imageNamed: "standing2")
         player.zPosition = 2
         player.size = CGSize(width: player.size.width / 4, height: player.size.height / 4)
         player.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
@@ -85,22 +91,22 @@ class GameScene: SKScene {
     // MARK: - BUTTON
     func createButton(){
         let button = SKSpriteNode(imageNamed: "rightButton")
-        button.position = CGPoint(x:self.frame.width/2, y:self.frame.height/4)
+        button.position = CGPoint(x:self.frame.width / 2, y:self.frame.height / 4)
         button.zPosition = 1
         button.name = "rightButton"
         self.addChild(button)
     }
     
     // MARK: - TREE
-    var tree: SKSpriteNode! = nil
-    var flag = 0
+    var tree: Array<SKSpriteNode> = []
+    var flag = false
     
     func createTree(){
-        let random = (Int)(arc4random() % 10)
-        tree = SKSpriteNode(imageNamed: "tree" + String(random))
-        tree.size = CGSize(width: self.frame.size.width / 4, height: self.frame.size.height / 4)
-        tree.position = CGPoint(x: self.frame.size.width - tree.size.width / 2, y: self.frame.size.height / 2)
-        tree.zPosition = 1
-        self.addChild(tree)
+        let random = (Int)(arc4random() % 10) + 1
+        tree.append(SKSpriteNode(imageNamed: "tree" + String(random)))
+        tree[tree.count - 1].size = CGSize(width: self.frame.size.width / 4, height: self.frame.size.height / 2)
+        tree[tree.count - 1].position = CGPoint(x: self.frame.size.width + tree[tree.count - 1].size.width / 2, y: self.frame.size.height / 2 + 45)
+        tree[tree.count - 1].zPosition = 1
+        self.addChild(tree[tree.count - 1])
     }
 }
