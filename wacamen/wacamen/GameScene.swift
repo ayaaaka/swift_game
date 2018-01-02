@@ -37,17 +37,18 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        if(flag){
-            
-            for i in 0 ... tree.count - 1{
-                tree[i].position.x -= 5
-                if(tree[i].position.x == self.frame.size.width / 2){
-                    createTree()
-                }
+        guard flag else{
+            return
+        }
+        
+        for i in 0 ... tree.count - 1{
+            tree[i].position.x -= 5
+            if(tree[i].position.x == self.frame.size.width / 2){
+                createTree()
             }
-            if(tree[0].position.x == -tree[0].size.width / 2){
-                tree.removeFirst()
-            }
+        }
+        if(tree[0].position.x == -tree[0].size.width / 2){
+            tree.removeFirst()
         }
     }
   
