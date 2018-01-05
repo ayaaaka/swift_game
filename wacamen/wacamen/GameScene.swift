@@ -12,46 +12,49 @@ import UIKit
 
 class GameScene: SKScene {
 
+
     override func didMove(to view: SKView) {
+        
+        self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
+        
         self.setupBackground()
         self.setupPlayer()
         createButton()
         createTree()
+        
+        //wait((Int32),10)
+        walkingPlayer()
     }
     
     // MARK: - touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first as UITouch? {
             let location = touch.location(in: self)
-            if self.atPoint(location).name == "rightButton" {
-                walkingPlayer()
+            if self.atPoint(location).name == "button" {
                 flag = true
             }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        player.removeAllActions()
-        player.texture = SKTexture(imageNamed: "standing2")
         flag = false
     }
     
     override func update(_ currentTime: TimeInterval) {
-        guard flag else{
-            return
-        }
         
-        for i in 0 ... tree.count - 1{
-            tree[i].position.x -= 5
-            if(tree[i].position.x == self.frame.size.width / 2){
-                createTree()
+        if(flag){
+            if(player.position.y < self.frame.size.height){
+                player.position.y += 50
+                moveTree()
             }
         }
+
+        moveTree()
         if(tree[0].position.x == -tree[0].size.width / 2){
             tree.removeFirst()
         }
     }
-  
+
     func setupBackground(){
         let backgroundTexture = SKSpriteNode(imageNamed: "background")
         addChild(backgroundTexture)
@@ -60,6 +63,8 @@ class GameScene: SKScene {
         let floarTexture = SKSpriteNode(imageNamed: "floar")
         addChild(floarTexture)
         floarTexture.size = CGSize(width: self.frame.size.width * 2, height: self.frame.size.height / 1.4)
+        floarTexture.physicsBody = SKPhysicsBody(texture: floarTexture.texture!, size: floarTexture.size)
+        floarTexture.physicsBody?.isDynamic = false
     }
     
     // MARK: - PLAYER
@@ -80,6 +85,9 @@ class GameScene: SKScene {
         player.zPosition = 2
         player.size = CGSize(width: player.size.width / 4, height: player.size.height / 4)
         player.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+        player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
+        player.physicsBody?.allowsRotation = false
+        
         self.addChild(player)
     }
     
@@ -94,7 +102,7 @@ class GameScene: SKScene {
         let button = SKSpriteNode(imageNamed: "rightButton")
         button.position = CGPoint(x:self.frame.width / 2, y:self.frame.height / 4)
         button.zPosition = 1
-        button.name = "rightButton"
+        button.name = "button"
         self.addChild(button)
     }
     
@@ -110,4 +118,14 @@ class GameScene: SKScene {
         tree[tree.count - 1].zPosition = 1
         self.addChild(tree[tree.count - 1])
     }
+    
+    func moveTree(){
+        for i in 0 ... tree.count - 1{
+            tree[i].position.x -= 5
+            if(tree[i].position.x == self.frame.size.width / 2){
+                createTree()
+            }
+        }
+    }
+
 }
