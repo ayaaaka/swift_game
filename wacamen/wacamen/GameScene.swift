@@ -27,6 +27,8 @@ class GameScene: SKScene {
     }
     
     // MARK: - touches
+    var flag = false
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first as UITouch? {
             let location = touch.location(in: self)
@@ -43,16 +45,19 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         
         //空中にいるときはジャンプできないように実装する
-        if(flag){
-            if(player.position.y < self.frame.size.height){
-                player.position.y += 50
-                moveTree()
-            }
-        }
 
         moveTree()
         if(tree[0].position.x == -tree[0].size.width / 2){
             tree.removeFirst()
+        }
+        
+        guard flag else {
+            return
+        }
+        
+        if(player.position.y < self.frame.size.height){
+            player.position.y += 50
+            moveTree()
         }
     }
 
@@ -64,8 +69,10 @@ class GameScene: SKScene {
         let floarTexture = SKSpriteNode(imageNamed: "floar")
         addChild(floarTexture)
         floarTexture.size = CGSize(width: self.frame.size.width * 2, height: self.frame.size.height / 1.4)
+        
         floarTexture.physicsBody = SKPhysicsBody(texture: floarTexture.texture!, size: floarTexture.size)
-        floarTexture.physicsBody?.isDynamic = false
+        guard let physicsBody = floarTexture.physicsBody else { return }
+        physicsBody.isDynamic = false
     }
     
     // MARK: - PLAYER
@@ -87,8 +94,9 @@ class GameScene: SKScene {
         player.size = CGSize(width: player.size.width / 4, height: player.size.height / 4)
         player.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
         player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
-        player.physicsBody?.allowsRotation = false
-        
+        guard let physicsBody = player.physicsBody else { return }
+        physicsBody.allowsRotation = false
+ 
         self.addChild(player)
     }
     
@@ -109,7 +117,6 @@ class GameScene: SKScene {
     
     // MARK: - TREE
     var tree: Array<SKSpriteNode> = []
-    var flag = false
     
     func createTree(){
         let random = (Int)(arc4random() % 10) + 1
