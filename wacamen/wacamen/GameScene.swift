@@ -22,7 +22,7 @@ class GameScene: SKScene {
         createButton()
         createTree()
         
-        //wait((Int32),10)
+        //少し待つように実装する
         walkingPlayer()
     }
     
@@ -42,6 +42,7 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         
+        //空中にいるときはジャンプできないように実装する
         if(flag){
             if(player.position.y < self.frame.size.height){
                 player.position.y += 50
