@@ -14,9 +14,7 @@ class GameScene: SKScene {
 
 
     override func didMove(to view: SKView) {
-        
         self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
-        
         self.setupBackground()
         self.setupPlayer()
         createButton()
@@ -27,7 +25,7 @@ class GameScene: SKScene {
     }
     
     // MARK: - touches
-    var flag = false
+    fileprivate var flag = false
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first as UITouch? {
@@ -43,17 +41,12 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        
-        //空中にいるときはジャンプできないように実装する
-
         moveTree()
         if(tree[0].position.x == -tree[0].size.width / 2){
             tree.removeFirst()
         }
         
-        guard flag else {
-            return
-        }
+        guard flag else { return }
         
         if(player.position.y < self.frame.size.height){
             player.position.y += 50
@@ -116,7 +109,7 @@ class GameScene: SKScene {
     }
     
     // MARK: - TREE
-    var tree: Array<SKSpriteNode> = []
+    fileprivate var tree: Array<SKSpriteNode> = []
     
     func createTree(){
         let random = (Int)(arc4random() % 10) + 1
