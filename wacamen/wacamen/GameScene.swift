@@ -25,20 +25,23 @@ class GameScene: SKScene {
     }
     
     // MARK: - touches
-    fileprivate var flag = false
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first as UITouch? {
             let location = touch.location(in: self)
             if self.atPoint(location).name == "button" {
-                flag = true
+                jumpPlayer()
             }
         }
     }
     
+    /*
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        flag = false
+        
     }
+ */
+    
+    //ジャンプ中フラグ
+    fileprivate var jumpFlag = false
     
     override func update(_ currentTime: TimeInterval) {
         moveTree()
@@ -46,12 +49,12 @@ class GameScene: SKScene {
             tree.removeFirst()
         }
         
-        guard flag else { return }
-        
-        if(player.position.y < self.frame.size.height){
-            player.position.y += 50
-            moveTree()
+        guard jumpFlag else {
+            return
         }
+        player.position.y += 150
+        moveTree()
+        jumpFlag = false;
     }
 
     func setupBackground(){
@@ -97,6 +100,13 @@ class GameScene: SKScene {
         let playerAnimation = SKAction.animate(with: playerTexture, timePerFrame: 0.2)
         let loopAnimation = SKAction.repeatForever(playerAnimation)
         player.run(loopAnimation)
+    }
+    
+    func jumpPlayer(){
+        guard !jumpFlag else {
+            return
+        }
+        jumpFlag = true
     }
     
     // MARK: - BUTTON
