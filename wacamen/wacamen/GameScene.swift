@@ -10,11 +10,22 @@ import SpriteKit
 import GameplayKit
 import UIKit
 
-class GameScene: SKScene {
-
+class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    //ビットマスク
+    struct Bitmask {
+        //プレイヤーに設定するカテゴリ
+        let Player: UInt32 = (1 << 0)
+        //地面に設定するカテゴリ
+        let Ground: UInt32  = (1 << 1)
+    }
 
     override func didMove(to view: SKView) {
+        //物理設定
         self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
+        //衝突情報を自分で受け取る
+        self.physicsWorld.contactDelegate = self
+        
         self.setupBackground()
         self.setupPlayer()
         createButton()
@@ -25,20 +36,19 @@ class GameScene: SKScene {
     }
     
     // MARK: - touches
-    fileprivate var flag = false
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first as UITouch? {
             let location = touch.location(in: self)
             if self.atPoint(location).name == "button" {
-                flag = true
+                jumpPlayer()
             }
         }
     }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        flag = false
-    }
+
+    //ジャンプ中フラグ
+    fileprivate var jumpFlag = false
+    //落下中フラグ
+    fileprivate var fallFlag = false
     
     override func update(_ currentTime: TimeInterval) {
         moveTree()
@@ -46,12 +56,12 @@ class GameScene: SKScene {
             tree.removeFirst()
         }
         
-        guard flag else { return }
-        
-        if(player.position.y < self.frame.size.height){
-            player.position.y += 50
-            moveTree()
-        }
+        guard jumpFlag else { return }
+        guard let physicsBody = player.physicsBody else { return }
+        physicsBody.applyImpulse(CGVector(dx: 0.0, dy: 60.0))
+        moveTree()
+        jumpFlag = false
+        fallFlag = true
     }
 
     func setupBackground(){
@@ -66,6 +76,9 @@ class GameScene: SKScene {
         floarTexture.physicsBody = SKPhysicsBody(texture: floarTexture.texture!, size: floarTexture.size)
         guard let physicsBody = floarTexture.physicsBody else { return }
         physicsBody.isDynamic = false
+        //ビットマスクを設定
+        physicsBody.categoryBitMask = Bitmask.init().Ground
+        
     }
     
     // MARK: - PLAYER
@@ -89,7 +102,10 @@ class GameScene: SKScene {
         player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.size)
         guard let physicsBody = player.physicsBody else { return }
         physicsBody.allowsRotation = false
- 
+        //ビットマスクを設定
+        physicsBody.categoryBitMask = Bitmask.init().Player
+        physicsBody.contactTestBitMask = Bitmask.init().Ground
+  
         self.addChild(player)
     }
     
@@ -97,6 +113,13 @@ class GameScene: SKScene {
         let playerAnimation = SKAction.animate(with: playerTexture, timePerFrame: 0.2)
         let loopAnimation = SKAction.repeatForever(playerAnimation)
         player.run(loopAnimation)
+    }
+    
+    func jumpPlayer(){
+        guard !jumpFlag && !fallFlag else {
+            return
+        }
+        jumpFlag = true
     }
     
     // MARK: - BUTTON
@@ -128,5 +151,21 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
+    // MARK: - PHYSICS
+    
+    
+    //衝突の検知
+    func didBegin(_ contact: SKPhysicsContact) {
+        //ゲームオーバーの時に抜け出す処理
+        //
+       
+        let player_ground = Bitmask.init().Player | Bitmask.init().Ground
+        let collisionCheck = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
+        
+        guard player_ground == collisionCheck else {
+            return
+        }
+        fallFlag = false
+    }
 }
