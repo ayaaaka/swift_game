@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ZhZ-Ma-Yhs">
+    <device id="retina4_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,15 +15,44 @@
             <objects>
                 <viewController id="ZhZ-Ma-Yhs" customClass="StartViewController" customModule="wacamen" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UEI-NB-SyB">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U3J-2W-ZDY">
+                                <rect key="frame" x="296.5" y="166.5" width="74" height="42"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="74" id="AYq-cG-V0u"/>
+                                    <constraint firstAttribute="height" constant="42" id="SSA-ZY-4hU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="START"/>
+                                <connections>
+                                    <segue destination="xde-ow-JDd" kind="show" id="INa-24-wJn"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="U3J-2W-ZDY" firstAttribute="centerY" secondItem="UEI-NB-SyB" secondAttribute="centerY" id="DQA-g7-fB1"/>
+                            <constraint firstItem="U3J-2W-ZDY" firstAttribute="centerX" secondItem="UEI-NB-SyB" secondAttribute="centerX" id="J83-5V-gqT"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="ZZM-D8-OQg"/>
                     </view>
+                    <connections>
+                        <outlet property="startButton" destination="U3J-2W-ZDY" id="m7D-uG-4sW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MPK-bA-LaJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-186.40000000000001" y="279.31034482758622"/>
+        </scene>
+        <!--Main-->
+        <scene sceneID="pg1-si-jir">
+            <objects>
+                <viewControllerPlaceholder storyboardIdentifier="GameViewController" storyboardName="Main" id="xde-ow-JDd" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ItH-XF-Dc5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="421" y="278"/>
         </scene>
     </scenes>
 </document>
