@@ -44,13 +44,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-    
-    /*
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-    }
- */
-    
+
     //ジャンプ中フラグ
     fileprivate var jumpFlag = false
     //落下中フラグ
@@ -62,13 +56,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             tree.removeFirst()
         }
         
-        guard jumpFlag else {
-            return
-        }
+        guard jumpFlag else { return }
         guard let physicsBody = player.physicsBody else { return }
         physicsBody.applyImpulse(CGVector(dx: 0.0, dy: 60.0))
         moveTree()
-        jumpFlag = false;
+        jumpFlag = false
         fallFlag = true
     }
 
@@ -113,8 +105,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //ビットマスクを設定
         physicsBody.categoryBitMask = Bitmask.init().Player
         physicsBody.contactTestBitMask = Bitmask.init().Ground
-        //衝突判定の相手を設定
-        physicsBody.collisionBitMask = Bitmask.init().Ground
   
         self.addChild(player)
     }
@@ -169,10 +159,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         //ゲームオーバーの時に抜け出す処理
         //
+       
+        let player_ground = Bitmask.init().Player | Bitmask.init().Ground
+        let collisionCheck = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
-        let rawPlayerType = Bitmask.init().Player
-        guard (contact.bodyA.categoryBitMask & rawPlayerType) == rawPlayerType ||
-            (contact.bodyB.categoryBitMask & rawPlayerType) == rawPlayerType else {
+        guard player_ground == collisionCheck else {
             return
         }
         fallFlag = false
