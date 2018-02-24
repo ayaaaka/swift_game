@@ -177,6 +177,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         obstacleArray.forEach {
             $0.position.x -= 8
         }
+        guard obstacleArray.count > 0 else { return }
+        if obstacleArray[0].position.x < -obstacleArray[0].size.width {
+            obstacleArray.removeFirst()
+        }
     }
    
     // MARK: - PHYSICS
