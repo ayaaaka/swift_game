@@ -12,12 +12,10 @@ import UIKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    //ビットマスク
     struct Bitmask {
-        //プレイヤーに設定するカテゴリ
         let Player: UInt32 = (1 << 0)
-        //地面に設定するカテゴリ
         let Ground: UInt32  = (1 << 1)
+        //let Obstacle: UInt32 = (1 << 2)
     }
 
     override func didMove(to view: SKView) {
@@ -45,17 +43,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    //ジャンプ中フラグ
     fileprivate var jumpFlag = false
-    //落下中フラグ
     fileprivate var fallFlag = false
     
     override func update(_ currentTime: TimeInterval) {
         moveTree()
-        if(tree[0].position.x == -tree[0].size.width / 2){
-            tree.removeFirst()
+        if(treeArray[0].position.x == -treeArray[0].size.width / 2){
+            treeArray.removeFirst()
         }
-        
+        obstacleCount = obstacleCount - 1
+        if obstacleCount == 0 {
+            createObstacle()
+            obstacleCount = (Int)(arc4random() % 100 ) + 60
+        }
+        moveObstacle()
         guard jumpFlag else { return }
         guard let physicsBody = player.physicsBody else { return }
         physicsBody.applyImpulse(CGVector(dx: 0.0, dy: 60.0))
@@ -64,6 +65,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         fallFlag = true
     }
 
+    //MARK: - background & floor
     func setupBackground(){
         let backgroundTexture = SKSpriteNode(imageNamed: "background")
         addChild(backgroundTexture)
@@ -78,11 +80,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody.isDynamic = false
         //ビットマスクを設定
         physicsBody.categoryBitMask = Bitmask.init().Ground
-        
     }
     
     // MARK: - PLAYER
-    
     struct Constants{
         static let playerImages = ["walking","walking2"]
     }
@@ -105,6 +105,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //ビットマスクを設定
         physicsBody.categoryBitMask = Bitmask.init().Player
         physicsBody.contactTestBitMask = Bitmask.init().Ground
+        //physicsBody.contactTestBitMask = Bitmask.init().Obstacle
   
         self.addChild(player)
     }
@@ -132,34 +133,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     // MARK: - TREE
-    fileprivate var tree: Array<SKSpriteNode> = []
+    fileprivate var treeArray: Array<SKSpriteNode> = []
     
     func createTree(){
         let random = (Int)(arc4random() % 10) + 1
-        tree.append(SKSpriteNode(imageNamed: "tree" + String(random)))
-        tree[tree.count - 1].size = CGSize(width: self.frame.size.width / 4, height: self.frame.size.height / 2)
-        tree[tree.count - 1].position = CGPoint(x: self.frame.size.width + tree[tree.count - 1].size.width / 2, y: self.frame.size.height / 2 + 45)
-        tree[tree.count - 1].zPosition = 1
-        self.addChild(tree[tree.count - 1])
+        treeArray.append(SKSpriteNode(imageNamed: "tree" + String(random)))
+        treeArray[treeArray.count - 1].size = CGSize(width: self.frame.size.width / 4, height: self.frame.size.height / 2)
+        treeArray[treeArray.count - 1].position = CGPoint(x: self.frame.size.width + treeArray[treeArray.count - 1].size.width / 2, y: self.frame.size.height / 2 + 45)
+        treeArray[treeArray.count - 1].zPosition = 1
+        self.addChild(treeArray[treeArray.count - 1])
     }
     
     func moveTree(){
-        for i in 0 ... tree.count - 1{
-            tree[i].position.x -= 5
-            if(tree[i].position.x == self.frame.size.width / 2){
+        for i in 0 ... treeArray.count - 1{
+            treeArray[i].position.x -= 5
+            if(treeArray[i].position.x == self.frame.size.width / 2){
                 createTree()
             }
         }
     }
     
+    //MARK: - Obstacle
+    fileprivate var obstacleCount: Int = 30
+    fileprivate var obstacleArray: Array<SKSpriteNode> = []
+    
+    func createObstacle(){
+        obstacleArray.append(SKSpriteNode(imageNamed: "obstacle"))
+        self.addChild(obstacleArray[obstacleArray.count - 1])
+        obstacleArray[obstacleArray.count - 1].size = CGSize(width: 50, height: 50)
+        obstacleArray[obstacleArray.count - 1].position = CGPoint(x: self.frame.size.width + obstacleArray[obstacleArray.count - 1].size.width, y: self.frame.size.height / 2 - 33)
+        obstacleArray[obstacleArray.count - 1].zPosition = 2
+    }
+    
+    func moveObstacle(){
+        guard obstacleArray.count > 0 else { return }
+        for i in 0 ... obstacleArray.count - 1{
+            obstacleArray[i].position.x -= 8
+        }
+    }
+    
     // MARK: - PHYSICS
-    
-    
     //衝突の検知
     func didBegin(_ contact: SKPhysicsContact) {
         //ゲームオーバーの時に抜け出す処理
-        //
-       
         let player_ground = Bitmask.init().Player | Bitmask.init().Ground
         let collisionCheck = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
