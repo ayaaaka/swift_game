@@ -48,7 +48,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(_ currentTime: TimeInterval) {
         moveTree()
-        if(treeArray[0].position.x == -treeArray[0].size.width / 2){
+        if( !treeArray.isEmpty && treeArray[0].position.x == -treeArray[0].size.width / 2){
             treeArray.removeFirst()
         }
         obstacleCount = obstacleCount - 1
@@ -144,9 +144,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func moveTree(){
-        for i in 0 ... treeArray.count - 1{
-            treeArray[i].position.x -= 5
-            if(treeArray[i].position.x == self.frame.size.width / 2){
+        treeArray.forEach {
+            $0.position.x -= 5
+            if($0.position.x == self.frame.size.width / 2){
                 createTree()
             }
         }
@@ -184,7 +184,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
    
     // MARK: - PHYSICS
-    var viewController: UIViewController?
+    weak var viewController: UIViewController?
+    var isGameOver: Bool = false
     //衝突の検知
     func didBegin(_ contact: SKPhysicsContact) {
         //ゲームオーバーの時に抜け出す処理
@@ -193,6 +194,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let collisionCheck = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         if player_obstacle == collisionCheck {
+            guard !isGameOver else { return }
+            isGameOver = true
+            guard let theViewController = viewController else { return }
+            if treeArray.count > 0 { treeArray.removeAll() }
+            if obstacleArray.count > 0 { obstacleArray.removeAll() }
+            theViewController.performSegue(withIdentifier: "toEndVC", sender: self)
         }
         
         guard player_ground == collisionCheck else {
