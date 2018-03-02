@@ -9,9 +9,13 @@
 import SpriteKit
 import GameplayKit
 import UIKit
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    var playSound:SKAction!
+    
+    //ビットマスク
     struct Bitmask {
         let Player: UInt32 = (1 << 0)
         let Ground: UInt32  = (1 << 1)
@@ -19,6 +23,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func didMove(to view: SKView) {
+        playSound = SKAction.playSoundFileNamed("effect1.mp3", waitForCompletion: true)
+        let music = SKAudioNode.init(fileNamed: "bgm.mp3")
+        self.addChild(music)
         //物理設定
         self.physicsWorld.gravity = CGVector(dx: 0.0, dy: -5.0)
         //衝突情報を自分で受け取る
@@ -60,6 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard jumpFlag else { return }
         guard let physicsBody = player.physicsBody else { return }
         physicsBody.applyImpulse(CGVector(dx: 0.0, dy: 60.0))
+        self.run(playSound)
         moveTree()
         jumpFlag = false
         fallFlag = true
@@ -199,5 +207,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             return
         }
         fallFlag = false
+        self.run(playSound)
     }
 }
