@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "イメージ003-2.png",
+      "filename" : "construction.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "イメージ003-1.png",
       "scale" : "2x"
     },
     {
