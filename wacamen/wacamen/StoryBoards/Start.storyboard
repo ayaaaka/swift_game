@@ -27,7 +27,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="START"/>
                                 <connections>
-                                    <segue destination="xde-ow-JDd" kind="show" identifier="toGameVC" id="INa-24-wJn"/>
+                                    <segue destination="xde-ow-JDd" kind="show" id="INa-24-wJn"/>
                                 </connections>
                             </button>
                         </subviews>
