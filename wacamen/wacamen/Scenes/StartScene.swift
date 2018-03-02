@@ -15,7 +15,7 @@ class StartScene: SKScene{
         createLabel()
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first as UITouch? {
             let location = touch.location(in: self)
             if self.atPoint(location).name == "start" {
