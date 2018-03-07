@@ -9,6 +9,7 @@
 import SpriteKit
 
 class EndScene: SKScene{
+    var score:Int = 0
     
     override func didMove(to view: SKView) {
         createRetryLabel()

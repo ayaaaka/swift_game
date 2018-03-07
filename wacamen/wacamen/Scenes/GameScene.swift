@@ -35,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.setupPlayer()
         createButton()
         createTree()
+        scoreDisplay()
         
         //少し待つように実装する
         walkingPlayer()
@@ -163,6 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: - Obstacle
     fileprivate var obstacleCount: Int = 30
     fileprivate var obstacleArray: Array<SKSpriteNode> = []
+    private let obstacleSpeed: CGFloat = 12.0
     
     func createObstacle(){
         let obstacle = SKSpriteNode(imageNamed: "obstacle")
@@ -170,7 +172,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(obstacle)
 
         obstacle.size = CGSize(width: 50, height: 50)
-        obstacle.position = CGPoint(x: self.frame.size.width, y: self.frame.size.height / 2 - 30)
+        obstacle.position = CGPoint(x: self.frame.size.width + obstacle.size.width, y: self.frame.size.height / 2 - 30)
         obstacle.zPosition = 2
         
         guard let texture = obstacle.texture else { return }
@@ -183,7 +185,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func moveObstacle(){
         obstacleArray.forEach {
-            $0.position.x -= 8
+            $0.position.x -= obstacleSpeed
+            let obstacleRightX = $0.position.x + $0.size.width
+            if(obstacleRightX <= player.position.x && player.position.x < obstacleRightX + obstacleSpeed){
+                addScore()
+            }
         }
         guard obstacleArray.count > 0 else { return }
         if obstacleArray[0].position.x < -obstacleArray[0].size.width {
@@ -214,7 +220,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func toEndScene(){
         let scene = EndScene(size: self.scene!.size)
         scene.scaleMode = SKSceneScaleMode.aspectFill
+        scene.score = self.score
         self.view?.presentScene(scene)
     }
     
+    // MARK: - SCORE
+    private var score:Int = 0
+    private let scoreLabel = SKLabelNode()
+    
+    func addScore(){
+        score += 10
+        scoreLabel.text = String(describing: score)
+    }
+    
+    func scoreDisplay(){
+        scoreLabel.text = String(describing: score)
+        scoreLabel.position = CGPoint(x:scoreLabel.fontSize, y:frame.size.height - scoreLabel.fontSize)
+        scoreLabel.name = "score"
+        scoreLabel.zPosition = 2
+        self.addChild(scoreLabel)
+    }
 }
