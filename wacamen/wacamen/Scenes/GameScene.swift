@@ -224,8 +224,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     // MARK: - SCORE
-    var score:Int = 0
-    let scoreLabel = SKLabelNode()
+    private var score:Int = 0
+    private let scoreLabel = SKLabelNode()
     
     func addScore(){
         score += 10
