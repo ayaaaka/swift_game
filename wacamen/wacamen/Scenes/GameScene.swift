@@ -201,6 +201,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let collisionCheck = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         if player_obstacle == collisionCheck {
+            toEndScene()
         }
         
         guard player_ground == collisionCheck else {
@@ -209,4 +210,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         fallFlag = false
         self.run(playSound)
     }
+    
+    func toEndScene(){
+        let scene = EndScene(size: self.scene!.size)
+        scene.scaleMode = SKSceneScaleMode.aspectFill
+        self.view?.presentScene(scene)
+    }
+    
 }
