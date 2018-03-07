@@ -35,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.setupPlayer()
         createButton()
         createTree()
+        scoreDisplay()
         
         //少し待つように実装する
         walkingPlayer()
@@ -183,7 +184,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func moveObstacle(){
         obstacleArray.forEach {
-            $0.position.x -= 8
+            $0.position.x -= 15
+            if($0.position.x + $0.size.width < player.position.x && player.position.x < $0.position.x + $0.size.width + 8){
+                addScore()
+            }
         }
         guard obstacleArray.count > 0 else { return }
         if obstacleArray[0].position.x < -obstacleArray[0].size.width {
@@ -214,7 +218,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func toEndScene(){
         let scene = EndScene(size: self.scene!.size)
         scene.scaleMode = SKSceneScaleMode.aspectFill
+        scene.score = self.score
         self.view?.presentScene(scene)
     }
     
+    // MARK: - SCORE
+    var score:Int = 0
+    let scoreLabel = SKLabelNode()
+    
+    func addScore(){
+        score += 10
+        scoreLabel.text = String(describing: score)
+    }
+    
+    func scoreDisplay(){
+        scoreLabel.text = String(describing: score)
+        scoreLabel.position = CGPoint(x:scoreLabel.fontSize, y:frame.size.height - scoreLabel.fontSize)
+        scoreLabel.name = "score"
+        scoreLabel.zPosition = 2
+        self.addChild(scoreLabel)
+    }
 }
