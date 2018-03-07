@@ -164,6 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //MARK: - Obstacle
     fileprivate var obstacleCount: Int = 30
     fileprivate var obstacleArray: Array<SKSpriteNode> = []
+    private let obstacleSpeed: CGFloat = 12.0
     
     func createObstacle(){
         let obstacle = SKSpriteNode(imageNamed: "obstacle")
@@ -184,8 +185,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func moveObstacle(){
         obstacleArray.forEach {
-            $0.position.x -= 15
-            if($0.position.x + $0.size.width < player.position.x && player.position.x < $0.position.x + $0.size.width + 8){
+            $0.position.x -= obstacleSpeed
+            if($0.position.x + $0.size.width < player.position.x && player.position.x < $0.position.x + $0.size.width + obstacleSpeed){
                 addScore()
             }
         }
