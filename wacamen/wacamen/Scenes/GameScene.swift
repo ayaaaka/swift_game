@@ -186,7 +186,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func moveObstacle(){
         obstacleArray.forEach {
             $0.position.x -= obstacleSpeed
-            if($0.position.x + $0.size.width < player.position.x && player.position.x < $0.position.x + $0.size.width + obstacleSpeed){
+            if($0.position.x + $0.size.width <= player.position.x && player.position.x < $0.position.x + $0.size.width + obstacleSpeed){
                 addScore()
             }
         }
