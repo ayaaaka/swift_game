@@ -171,7 +171,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(obstacle)
 
         obstacle.size = CGSize(width: 50, height: 50)
-        obstacle.position = CGPoint(x: self.frame.size.width, y: self.frame.size.height / 2 - 30)
+        obstacle.position = CGPoint(x: self.frame.size.width + obstacle.size.width, y: self.frame.size.height / 2 - 30)
         obstacle.zPosition = 2
         
         guard let texture = obstacle.texture else { return }
