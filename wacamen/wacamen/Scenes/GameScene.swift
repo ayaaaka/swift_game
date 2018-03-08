@@ -55,14 +55,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     fileprivate var fallFlag = false
     
     override func update(_ currentTime: TimeInterval) {
+        countTimer()
         moveTree()
-        if(treeArray[0].position.x == -treeArray[0].size.width / 2){
+        if(treeArray[0].position.x < -treeArray[0].size.width / 2){
             treeArray.removeFirst()
         }
         obstacleCount = obstacleCount - 1
         if obstacleCount == 0 {
             createObstacle()
-            obstacleCount = (Int)(arc4random() % 100 ) + 60
+            obstacleCount = (Int)(arc4random() % 100 ) + 60 - (timer / 10)
         }
         moveObstacle()
         guard jumpFlag else { return }
@@ -142,6 +143,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // MARK: - TREE
     fileprivate var treeArray: Array<SKSpriteNode> = []
+    fileprivate let treeSpeed:Int = 5
     
     func createTree(){
         let random = (Int)(arc4random() % 10) + 1
@@ -154,8 +156,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func moveTree(){
         for i in 0 ... treeArray.count - 1{
-            treeArray[i].position.x -= 5
-            if(treeArray[i].position.x == self.frame.size.width / 2){
+            treeArray[i].position.x -= (CGFloat(treeSpeed) + accelSpeed)
+            if(treeArray[i].position.x <= self.frame.size.width / 2 && self.frame.size.width / 2 - CGFloat(treeSpeed) - accelSpeed < treeArray[i].position.x) {
                 createTree()
             }
         }
@@ -185,9 +187,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func moveObstacle(){
         obstacleArray.forEach {
-            $0.position.x -= obstacleSpeed
+            $0.position.x -= (obstacleSpeed + accelSpeed)
             let obstacleRightX = $0.position.x + $0.size.width
-            if(obstacleRightX <= player.position.x && player.position.x < obstacleRightX + obstacleSpeed){
+            if(obstacleRightX <= player.position.x && player.position.x < obstacleRightX + obstacleSpeed + accelSpeed){
                 addScore()
             }
         }
@@ -222,6 +224,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scene.scaleMode = SKSceneScaleMode.aspectFill
         scene.score = self.score
         self.view?.presentScene(scene)
+    }
+    
+    // MARK: TIMER
+    private var timer:Int = 0
+    private var accelSpeed:CGFloat = 0.0
+    
+    func countTimer(){
+        guard timer < 1000 else {
+            return
+        }
+        timer += 1
+        accelSpeed = CGFloat(timer / 50)
     }
     
     // MARK: - SCORE
