@@ -60,7 +60,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         obstacleCount = obstacleCount - 1
         if obstacleCount == 0 {
             createObstacle()
-            obstacleCount = (Int)(arc4random() % 100 ) + 60 - (timer / 10)
+            obstacleCount = (Int)(arc4random() % 100 ) + 60 - (timer / 50)
         }
         moveObstacle()
         guard jumpFlag else { return }
@@ -232,11 +232,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var accelSpeed:CGFloat = 0.0
     
     func countTimer(){
-        guard timer < 1000 else {
+        guard timer < 3000 else {
             return
         }
         timer += 1
-        accelSpeed = CGFloat(timer / 50)
+        accelSpeed = CGFloat(timer / 100)
     }
     
     // MARK: - SCORE
