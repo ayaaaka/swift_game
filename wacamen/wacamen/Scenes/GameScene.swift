@@ -57,9 +57,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         countTimer()
         moveTree()
-        if(treeArray[0].position.x < -treeArray[0].size.width / 2){
-            treeArray.removeFirst()
-        }
         obstacleCount = obstacleCount - 1
         if obstacleCount == 0 {
             createObstacle()
@@ -161,6 +158,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 createTree()
             }
         }
+        guard treeArray[0].position.x < -treeArray[0].size.width / 2 else {
+            return
+        }
+        treeArray[0].removeFromParent()
     }
     
     //MARK: - Obstacle
@@ -195,7 +196,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         guard obstacleArray.count > 0 else { return }
         if obstacleArray[0].position.x < -obstacleArray[0].size.width {
-            obstacleArray.removeFirst()
+            obstacleArray[0].removeFromParent()
         }
     }
    
